@@ -74,11 +74,8 @@ def test_hangman(word, letters):
 
     # verify that the chosen letters that appear in the original word also
     # appear in the output word
-    a = word_set & output_set
-    b = letters_set & output_set
-    assert a == b
+    assert word_set & output_set == letters_set & output_set
 
     # verify that any letters from the original word that do not appear in the
     # chosen letters also do not appear in the output word
-    a = word_set - letters_set
-    assert a & output_set == set()
+    assert word_set - letters_set & output_set == set()
