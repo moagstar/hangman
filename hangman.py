@@ -1,7 +1,12 @@
 # std
 import base64
+import sys
 # 3rd party
 from Crypto.Cipher import AES
+
+
+base64encode = base64.encodebytes if sys.version_info.major >= 3 else base64.encodestring
+base64decode = base64.decodebytes if sys.version_info.major >= 3 else base64.decodestring
 
 
 secret_key = b'\x03\xf2\x15\xe7`\xebd\x9e[7v14\x14.C'
@@ -34,10 +39,10 @@ def encrypt(word):
 
     :return: str - The base64 encoded and encrypted word.
     """
-    encoded = base64.encodebytes(word.encode('utf-8'))
+    encoded = base64encode(word.encode('utf-8'))
     padded = pad(encoded, 16, b'=')
     encrypted = cipher.encrypt(padded)
-    encrypted_encoded = base64.encodebytes(encrypted)
+    encrypted_encoded = base64encode(encrypted)
     return encrypted_encoded.decode('ascii')
 
 
@@ -51,9 +56,9 @@ def decrypt(encrypted_word):
     :return: str - The decrypted word.
     """
     encoded = encrypted_word.encode('ascii')
-    decoded = base64.decodebytes(encoded)
+    decoded = base64decode(encoded)
     decrypted = cipher.decrypt(decoded)
-    decoded_decrypted = base64.decodebytes(decrypted)
+    decoded_decrypted = base64decode(decrypted)
     return decoded_decrypted.decode('utf-8')
 
 
@@ -67,5 +72,6 @@ def hangman(encrypted_word, letters):
 
     :return: str - The generated hangman string.
     """
-    word = decrypt(encrypted_word)
-    return ''.join(x if x in letters else '_' for x in word)
+    lower_word = decrypt(encrypted_word).lower()
+    lower_letters = letters.lower()
+    return ''.join(x if x in lower_letters else '_' for x in lower_word)
