@@ -53,49 +53,49 @@ def test_encrypt_decrypt(text):
 
 
 @given(st.text(config.VALID_CHARS), st.text(config.VALID_CHARS, max_size=6))
-def test_hangman(word, letters):
+def test_hangman(word, characters):
     """
     Verify the properties of the hangman function.
 
     :param word: The word that should be guessed.
-    :param letters: The letters that the user has already chosen.
+    :param characters: The characters that the user has already chosen.
     """
-    output = hangman.get_hangman_string(word, letters)
+    output = hangman.get_hangman_string(word, characters)
 
     # verify that the length of the word didn't change
     assert len(output) == len(word)
 
     # get the constituent characters of the various strings as sets
-    word_set, output_set, letters_set = map(set, (word, output, letters))
+    word_set, output_set, characters_set = map(set, (word, output, characters))
 
-    # verify that the chosen letters that appear in the original word also
+    # verify that the chosen characters that appear in the original word also
     # appear in the output word
-    assert word_set & output_set == letters_set & output_set
+    assert word_set & output_set == characters_set & output_set
 
-    # verify that any letters from the original word that do not appear in the
-    # chosen letters also do not appear in the output word
-    assert word_set - letters_set & output_set == set()
+    # verify that any characters from the original word that do not appear in the
+    # chosen characters also do not appear in the output word
+    assert word_set - characters_set & output_set == set()
 
 
 @given(st.text(config.VALID_CHARS, min_size=1),
        st.text(config.VALID_CHARS, max_size=6))
-def test_encode_decode_secret_token(word, letters):
+def test_encode_decode_secret_token(word, characters):
     """
     Verify that the encoding / decoding of the secret token round trips correctly.
 
     :param word: The word to be guessed.
-    :param letters: The letters that have been chosen.
+    :param characters: The characters that have been chosen.
     """
-    secret_token = app.encode_secret_token(word, letters)
-    decoded_word, decoded_letters = app.decode_secret_token(secret_token)
+    secret_token = app.encode_secret_token(word, characters)
+    decoded_word, decoded_characters = app.decode_secret_token(secret_token)
     assert decoded_word == word
-    assert decoded_letters == letters
+    assert decoded_characters == characters
 
 
 def test_has_won():
     """
     Verify that has_won correctly calculates whether a game is lost or not
-    based on the word and the letters chosen.
+    based on the word and the characters chosen.
     """
     # TODO : upper / lower test
     assert not hangman.has_won('abc', 'ab')
@@ -107,7 +107,7 @@ def test_has_won():
 def test_has_lost():
     """
     Verify that has_lost correctly calculates whether a game is lost or not
-    based on the word and the letters chosen.
+    based on the word and the characters chosen.
     """
     # TODO : upper / lower test
     assert not hangman.has_lost('abc', 'abc')

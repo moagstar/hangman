@@ -11,23 +11,23 @@ var forceRedraw = function(element){
 
 /**
  * Update the user interface after retrieving the response about a particular
- * guessed letter.
- * @param letter {string} The letter that was guessed.
- * @param isCorrect {boolean} true if the letter appears in the secret word, otherwise false.
+ * guessed character.
+ * @param character {string} The character that was guessed.
+ * @param isCorrect {boolean} true if the character appears in the secret word, otherwise false.
  */
-function updateLetter(letter, isCorrect) {
+function updateLetter(character, isCorrect) {
     var cls = (isCorrect ? 'in' : '') + 'correct';
-    $('#_' + letter).addClass(cls).prop("disabled",true).blur();
-    var letterElement = window.document.getElementById('_' + letter);
-    forceRedraw(letterElement);
+    $('#_' + character).addClass(cls).prop("disabled",true).blur();
+    var characterElement = window.document.getElementById('_' + character);
+    forceRedraw(characterElement);
 }
 
 /**
- * Disable all letters so that no further input can occur, this happens when
+ * Disable all characters so that no further input can occur, this happens when
  * the game is either won or lost.
  */
 function disableAllLetters() {
-    $('.letter').prop("disabled",true);
+    $('.character').prop("disabled",true);
 }
 
 /**
@@ -41,13 +41,13 @@ function showTitle(id) {
 }
 
 /**
- * Callback for processing the response from guessing a letter.
- * @param letter {string} The letter that was guessed.
+ * Callback for processing the response from guessing a character.
+ * @param character {string} The character that was guessed.
  * @param data {Object} The response from the server.
  */
-function onHangmanString(letter, data) {
-    var isCorrect = data.hangman_string.indexOf(letter) < 0;
-    updateLetter(letter, isCorrect);
+function onHangmanString(character, data) {
+    var isCorrect = data.hangman_string.indexOf(character) < 0;
+    updateLetter(character, isCorrect);
     $("#hangman-string").html(data.hangman_string);
     secretToken = data.secret_token;
     if (data.status == 'lost') {
@@ -61,11 +61,11 @@ function onHangmanString(letter, data) {
 }
 
 /**
- * Callback for handling a user click on a letter.
- * @param letter {string} The letter that was clicked.
+ * Callback for handling a user click on a character.
+ * @param character {string} The character that was clicked.
  */
-function onLetterChosen(letter) {
-    var params = {'secret_token': secretToken, 'letter': letter};
-    var callback = onHangmanString.bind(null, letter);
+function onLetterChosen(character) {
+    var params = {'secret_token': secretToken, 'character': character};
+    var callback = onHangmanString.bind(null, character);
     $.getJSON('hangman', params, callback);
 }

@@ -30,11 +30,11 @@ class HangmanMachine(RuleBasedStateMachine):
     There are three operations defined:
 
         ``new_game``        - selects a new word to play.
-        ``guess_correct``   - guess a letter which we know to be correct.
-        ``guess_incorrect`` - guess a letter which we know to be incorrect.
+        ``guess_correct``   - guess a character which we know to be correct.
+        ``guess_incorrect`` - guess a character which we know to be incorrect.
 
     The game is modelled as two strings, one for the list of correctly chosen
-    letters and one for the incorrectly chosen letters.
+    characters and one for the incorrectly chosen characters.
 
     We check the following invariants hold, regardless of which operations are
     performed and in which order, comparing the result from our model with the
@@ -43,7 +43,7 @@ class HangmanMachine(RuleBasedStateMachine):
         ``hangman string``  - verify that the hangman string is displayed and is
                               correct according to our model.
 
-        ``letters``         - verify that the letters in the user interface have
+        ``characters``         - verify that the characters in the user interface have
                               a css class applied so that the incorrect /
                               correct difference can be visually shown, checking
                               the values in the actual game against the model.
@@ -60,12 +60,12 @@ class HangmanMachine(RuleBasedStateMachine):
         """
         Convert the model into an expected hangman string.
         """
-        all_letters = self.correct_letters + self.incorrect_letters
-        return hangman.get_hangman_string(self.word, all_letters)
+        all_characters = self.correct_characters + self.incorrect_characters
+        return hangman.get_hangman_string(self.word, all_characters)
 
     def __init__(self):
         super(HangmanMachine, self).__init__()
-        self.correct_letters, self.incorrect_letters = '', ''
+        self.correct_characters, self.incorrect_characters = '', ''
         self.word = None
 
     @precondition(lambda self: self.word is None)
@@ -82,49 +82,49 @@ class HangmanMachine(RuleBasedStateMachine):
         get_word.return_value, self.word = word, word
         page.visit("/")
 
-    def _guess_letter_precondition(self, letter):
+    def _guess_character_precondition(self, character):
         """
-        Common preconditions for selecting a letter in the actual game used for
-        both incorrect and correct letter guesses.
+        Common preconditions for selecting a character in the actual game used for
+        both incorrect and correct character guesses.
 
-        We need to prevent a letter being chosen which has been disabled in the
-        front end, so we ensure that a letter is not chosen in if the game is
-        over, or if the particular letter has already been chosen.
+        We need to prevent a character being chosen which has been disabled in the
+        front end, so we ensure that a character is not chosen in if the game is
+        over, or if the particular character has already been chosen.
 
-        :param letter: The letter selected by hypothesis.
+        :param character: The character selected by hypothesis.
         """
-        assume(not hangman.has_lost(self.word, self.incorrect_letters))
-        assume(not hangman.has_won(self.word, self.correct_letters))
-        letters = set(self.correct_letters) | set(self.incorrect_letters)
-        assume(letter not in letters)
+        assume(not hangman.has_lost(self.word, self.incorrect_characters))
+        assume(not hangman.has_won(self.word, self.correct_characters))
+        characters = set(self.correct_characters) | set(self.incorrect_characters)
+        assume(character not in characters)
 
     @precondition(lambda self: self.word)
     @rule(random=st.randoms())
-    def guess_correct_letter(self, random):
+    def guess_correct_character(self, random):
         """
-        Operation to guess a letter correctly.
+        Operation to guess a character correctly.
 
         :param random: Hypothesis generated random module which can be used to
-                       choose a correct letter from the input string.
+                       choose a correct character from the input string.
         """
-        letter = random.choice(self.word)
-        self._guess_letter_precondition(letter)
-        self.correct_letters += letter
-        page.click_button(letter)
+        character = random.choice(self.word)
+        self._guess_character_precondition(character)
+        self.correct_characters += character
+        page.click_button(character)
 
     @precondition(lambda self: self.word)
-    @rule(letter=st.sampled_from(VALID_CHARS))
-    def guess_incorrect_letter(self, letter):
+    @rule(character=st.sampled_from(VALID_CHARS))
+    def guess_incorrect_character(self, character):
         """
-        Operation to guess a letter incorrectly.
+        Operation to guess a character incorrectly.
 
-        :param letter: The letter to guess, filtered in this function using
+        :param character: The character to guess, filtered in this function using
                        ``assume``.
         """
-        self._guess_letter_precondition(letter)
-        assume(letter not in self.word)  # ensure incorrect
-        self.incorrect_letters += letter
-        page.click_button(letter)
+        self._guess_character_precondition(character)
+        assume(character not in self.word)  # ensure incorrect
+        self.incorrect_characters += character
+        page.click_button(character)
 
     def _verify_hangman_string(self):
         """
@@ -133,21 +133,21 @@ class HangmanMachine(RuleBasedStateMachine):
         if self.word is not None:
             assert page.find("#hangman-string").text == self.hangman_string
 
-    def _verify_letters(self, letters, cls):
+    def _verify_characters(self, characters, cls):
         """
-        Verify that all letters in the front end have the appropriate class
+        Verify that all characters in the front end have the appropriate class
         applied, so that a visual distinction between correct / incorrect can
         be made.
 
-        :param letters:
+        :param characters:
         :param cls:
         """
-        for letter in letters:
-            assert page.find('#_' + letter + '.' + cls).text == letter
+        for character in characters:
+            assert page.find('#_' + character + '.' + cls).text == character
 
     def _verify_hangman_image(self):
         """
-        Verify that the expected image is shown based on the incorrect letters
+        Verify that the expected image is shown based on the incorrect characters
         in the model.
         """
         pass # TODO
@@ -157,9 +157,9 @@ class HangmanMachine(RuleBasedStateMachine):
         Verify that the expected title text is shown based on whether our model
         tells us the game is won, lost or still being played.
         """
-        if hangman.has_lost(self.word, self.incorrect_letters):
+        if hangman.has_lost(self.word, self.incorrect_characters):
             assert page.has_text(LOST_TEXT)
-        elif hangman.has_won(self.word, self.correct_letters):
+        elif hangman.has_won(self.word, self.correct_characters):
             assert page.has_text(WON_TEXT)
         elif self.word:
             assert page.has_text(PLAYING_TEXT)
@@ -169,8 +169,8 @@ class HangmanMachine(RuleBasedStateMachine):
         Check the invariants of the system.
         """
         self._verify_hangman_string()
-        self._verify_letters(self.correct_letters, 'correct')
-        self._verify_letters(self.incorrect_letters, 'incorrect')
+        self._verify_characters(self.correct_characters, 'correct')
+        self._verify_characters(self.incorrect_characters, 'incorrect')
         self._verify_title_text()
         self._verify_hangman_image()
 

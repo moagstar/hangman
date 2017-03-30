@@ -23,9 +23,9 @@ def get_word():
     return random.choice(WORDS_POOL)
 
 
-def encode_secret_token(word, letters):
+def encode_secret_token(word, characters):
     """
-    Encode the word for this game and the already selected letters into a
+    Encode the word for this game and the already selected characters into a
     secret token which can be safely passed to the front end without the
     user seeing what the word to be guessed is.
 
@@ -33,11 +33,11 @@ def encode_secret_token(word, letters):
     passing to the front end.
 
     :param word: The word to be guessed.
-    :param letters: The letters already chosen.
+    :param characters: The characters already chosen.
 
-    :return: The word and letters encoded, encrypted and url quoted.
+    :return: The word and characters encoded, encrypted and url quoted.
     """
-    token = ';'.join([word, letters])
+    token = ';'.join([word, characters])
     encrypted = token#hangman.encrypt(token)
     return urllib.parse.quote(encrypted, safe='')
 
@@ -45,12 +45,12 @@ def encode_secret_token(word, letters):
 def decode_secret_token(secret_token):
     """
     Decode a secret token that was previously encoded, encrypted and quoted
-    to get back the word for the game and the letters that have already been
+    to get back the word for the game and the characters that have already been
     chosen.
 
     :param secret_token: The secret token containing the encoded data.
 
-    :return: tuple of word, letters unquoted, decrypted and decoded from the
+    :return: tuple of word, characters unquoted, decrypted and decoded from the
              secret token.
     """
     secret_token = urllib.parse.unquote(secret_token)
@@ -68,7 +68,7 @@ def index():
         'index.html',
         secret_token=encode_secret_token(word, ''),
         hangman=hangman.get_hangman_string(word, ''),
-        letters_to_choose_from=config.VALID_CHARS,
+        characters_to_choose_from=config.VALID_CHARS,
         won=config.WON_TEXT,
         lost=config.LOST_TEXT,
         playing=config.PLAYING_TEXT,
@@ -79,25 +79,25 @@ def index():
 def hangman_get():
     """
     Handle the GET for retrieving the hangman string for a particular word and
-    chosen letters.
+    chosen characters.
 
     The result is the hangman string and the updated secret token.
     """
     secret_token = request.args['secret_token']
-    word, letters = decode_secret_token(secret_token)
-    letters += request.args['letter']
+    word, characters = decode_secret_token(secret_token)
+    characters += request.args['character']
 
-    if hangman.has_lost(word, letters):
+    if hangman.has_lost(word, characters):
         status = 'lost'
-    elif hangman.has_won(word, letters):
-        secret_token = encode_secret_token(word, letters)
+    elif hangman.has_won(word, characters):
+        secret_token = encode_secret_token(word, characters)
         status = 'won'
     else:
-        secret_token = encode_secret_token(word, letters)
+        secret_token = encode_secret_token(word, characters)
         status = 'playing'
 
     return jsonify(
-        hangman_string=hangman.get_hangman_string(word, letters),
+        hangman_string=hangman.get_hangman_string(word, characters),
         secret_token=secret_token,
         status=status,
     )

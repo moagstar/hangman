@@ -64,37 +64,37 @@ def decrypt(message):
     return decoded_decrypted.decode('utf-8')
 
 
-def get_hangman_string(word, letters):
+def get_hangman_string(word, characters):
     """
-    Get a hangman string for a word and letters that the user has already
-    chosen. A hangman string is the original word with any letters that do
-    not appear in ``letters`` replaced with ``HIDDEN_CHAR``.
+    Get a hangman string for a word and characters that the user has already
+    chosen. A hangman string is the original word with any characters that do
+    not appear in ``characters`` replaced with ``HIDDEN_CHAR``.
 
     :param word: str - Word for this game.
-    :param letters: str - The letters already chosen by the player.
+    :param characters: str - The characters already chosen by the player.
 
     :return: str - The generated hangman string.
     """
     upper_word = word.upper()
-    upper_letters = letters.upper()
-    return ''.join(x if x in upper_letters else config.HIDDEN_CHAR for x in upper_word)
+    upper_characters = characters.upper()
+    return ''.join(x if x in upper_characters else config.HIDDEN_CHAR for x in upper_word)
 
 
-def has_won(word, letters):
+def has_won(word, characters):
     if word:
         upper_word = word.upper()
-        upper_letters = letters.upper()
-        missing_letters = set(upper_word) - set(upper_letters)
-        return missing_letters == set()
+        upper_characters = characters.upper()
+        missing_characters = set(upper_word) - set(upper_characters)
+        return missing_characters == set()
     else:
         return False
 
 
-def has_lost(word, letters):
+def has_lost(word, characters):
     if word:
         upper_word = word.upper()
-        upper_letters = letters.upper()
-        incorrect_letters = set(upper_letters) - set(upper_word)
-        return len(incorrect_letters) >= config.MAX_INCORRECT_GUESSES
+        upper_characters = characters.upper()
+        incorrect_characters = set(upper_characters) - set(upper_word)
+        return len(incorrect_characters) >= config.MAX_INCORRECT_GUESSES
     else:
         return False
