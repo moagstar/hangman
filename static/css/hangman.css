@@ -29,8 +29,10 @@ button {
 @media (max-width: 768px) {
     .btn-sm {
         padding: 2px 4px;
-        font-size: 80%;
+        font-size: 50%;
         line-height: 1;
+        width: 12px;
+        height: 12px;
     }
 }
 
