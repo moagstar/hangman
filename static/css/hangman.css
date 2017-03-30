@@ -25,3 +25,21 @@ button {
 #hangman-string {
     letter-spacing: 5px;
 }
+
+@media (max-width: 768px) {
+    .btn-sm {
+        padding: 2px 4px;
+        font-size: 80%;
+        line-height: 1;
+    }
+}
+
+@media (min-width: 769px) {
+    .btn-sm {
+        padding: 4px 9px;
+        font-size: 90%;
+        line-height: 1.2;
+        width: 45px;
+        height: 45px;
+    }
+}
