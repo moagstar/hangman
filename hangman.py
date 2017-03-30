@@ -3,6 +3,8 @@ import base64
 import sys
 # 3rd party
 from Crypto.Cipher import AES
+# local
+import config
 
 
 base64encode = base64.encodebytes if sys.version_info.major >= 3 else base64.encodestring
@@ -29,49 +31,70 @@ def pad(word, n, pad_char):
     return word + pad_char * (n - len(word) % n)
 
 
-def encrypt(word):
+def encrypt(message):
     """
-    Encrypt the given word using the hangman cipher so that we can send the
+    Encrypt the given message using the hangman cipher so that we can send the
     word back and forth between front end and back end without the user being
     able to see what it is.
 
-    :param word: str - The word to encrypt.
+    :param message: str - The word to encrypt.
 
-    :return: str - The base64 encoded and encrypted word.
+    :return: str - The base64 encoded and encrypted message.
     """
-    encoded = base64encode(word.encode('utf-8'))
+    encoded = base64encode(message.encode('utf-8'))
     padded = pad(encoded, 16, b'=')
     encrypted = cipher.encrypt(padded)
     encrypted_encoded = base64encode(encrypted)
     return encrypted_encoded.decode('ascii')
 
 
-def decrypt(encrypted_word):
+def decrypt(message):
     """
-    Decrypt an encrypted and base64 encoded word to get back the original text
+    Decrypt an encrypted and base64 encoded message to get back the original text
     using the hangman cipher.
 
-    :param encrypted_word: str - base64 encoded and encrypted word.
+    :param message: str - base64 encoded and encrypted message.
 
-    :return: str - The decrypted word.
+    :return: str - The decrypted message.
     """
-    encoded = encrypted_word.encode('ascii')
+    encoded = message.encode('ascii')
     decoded = base64decode(encoded)
     decrypted = cipher.decrypt(decoded)
     decoded_decrypted = base64decode(decrypted)
     return decoded_decrypted.decode('utf-8')
 
 
-def hangman(encrypted_word, letters):
+def get_hangman_string(word, letters):
     """
-    Get a hangman string for an encrypted word and letters that the user has
-    already chosen.
+    Get a hangman string for a word and letters that the user has already
+    chosen. A hangman string is the original word with any letters that do
+    not appear in ``letters`` replaced with ``HIDDEN_CHAR``.
 
-    :param encrypted_word: str - Encrypted word for this game.
+    :param word: str - Word for this game.
     :param letters: str - The letters already chosen by the player.
 
     :return: str - The generated hangman string.
     """
-    lower_word = decrypt(encrypted_word).lower()
-    lower_letters = letters.lower()
-    return ''.join(x if x in lower_letters else '_' for x in lower_word)
+    upper_word = word.upper()
+    upper_letters = letters.upper()
+    return ''.join(x if x in upper_letters else config.HIDDEN_CHAR for x in upper_word)
+
+
+def has_won(word, letters):
+    if word:
+        upper_word = word.upper()
+        upper_letters = letters.upper()
+        missing_letters = set(upper_word) - set(upper_letters)
+        return missing_letters == set()
+    else:
+        return False
+
+
+def has_lost(word, letters):
+    if word:
+        upper_word = word.upper()
+        upper_letters = letters.upper()
+        incorrect_letters = set(upper_letters) - set(upper_word)
+        return len(incorrect_letters) >= config.MAX_INCORRECT_GUESSES()
+    else:
+        return False

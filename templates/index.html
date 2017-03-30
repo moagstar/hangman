@@ -11,31 +11,35 @@
 
 {% block content %}
     <style>
-        .red {
+        .incorrect
+        {
             text-decoration: line-through;
             pointer-events: none;
             color: red;
         }
-        .green
+        .correct
         {
             pointer-events: none;
             color: green;
         }
-        a
-        {
-            color: inherit;
-        }
     </style>
 
+    <script>
+        var secretToken = '{{ secret_token }}';
+        console.log(secretToken);
+    </script>
+
     <div class="col-md-4 col-md-offset-4">
-        <h2 id="header">Choose a Letter...</h2>
+        <h2 class="hidden" id="won">{{ won }}&nbsp;<a href="/">Again</a>?</h2>
+        <h2 class="hidden" id="lost">{{ lost }}&nbsp;<a href="/">Again</a>?</h2>
+        <h2 id="playing">{{ playing }}&nbsp;or try a <a href="/">Different Word</a>?</h2>
         <hr>
         {% for letter in letters_to_choose_from %}
             <div class="btn-group" role="group" aria-label="{{ letter }}" style="font-family:monospace; padding-bottom:5px">
-                <button id="{{ letter }}"
+                <button id="_{{ letter }}"
                         type="button"
-                        class="btn btn-lg"
-                        onclick="onLetterChosen('{{ secret }}', '{{ letter }}')">
+                        class="btn btn-lg letter"
+                        onclick="onLetterChosen('{{ letter }}')">
                     {{ letter }}
                 </button>
             </div>
