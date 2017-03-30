@@ -56,3 +56,5 @@ To run the tests:
 ```bash
 $ py.test
 ```
+
+This has been tested on Python 2.7 and 3.6 on Linux.

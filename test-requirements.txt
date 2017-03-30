@@ -1,6 +1,7 @@
 hypothesis
 pytest
-mock
 capybara-py
-selenium-webdriver
+selenium
 pytest-cov
+mock
+contextlib2
