@@ -21,7 +21,7 @@ os.environ["PATH"] = os.path.dirname(__file__) + os.pathsep + os.environ["PATH"]
 
 # setup mocks
 get_word_patcher = mock.patch('app.get_word')
-max_incorrect_guesses_patcher = mock.patch('config.MAX_INCORRECT_GUESSES')
+max_incorrect_guesses_patcher = mock.patch('config.MAX_INCORRECT_GUESSES', 2)
 
 
 class HangmanMachine(RuleBasedStateMachine):
@@ -43,7 +43,6 @@ class HangmanMachine(RuleBasedStateMachine):
     def new_game(self, word):
         get_word = get_word_patcher.start()
         max_incorrect_guesses = max_incorrect_guesses_patcher.start()
-        max_incorrect_guesses.return_value = 2
         get_word.return_value, self.word = word, word
         page.visit("/")
 

@@ -95,6 +95,6 @@ def has_lost(word, letters):
         upper_word = word.upper()
         upper_letters = letters.upper()
         incorrect_letters = set(upper_letters) - set(upper_word)
-        return len(incorrect_letters) >= config.MAX_INCORRECT_GUESSES()
+        return len(incorrect_letters) >= config.MAX_INCORRECT_GUESSES
     else:
         return False
