@@ -4,38 +4,24 @@
     HANGMAN
 {% endblock %}
 
+{% block styles %}
+    <link rel="stylesheet" href="static/css/hangman.css"></link>
+{% endblock %}
+
 {% block scripts %}
     {{super()}}
+    <script>var secretToken = '{{ secret_token }}';</script>
     <script src="static/js/hangman.js"></script>
 {% endblock %}
 
 {% block content %}
-    <style>
-        .incorrect
-        {
-            text-decoration: line-through;
-            pointer-events: none;
-            color: red;
-        }
-        .correct
-        {
-            pointer-events: none;
-            color: green;
-        }
-    </style>
-
-    <script>
-        var secretToken = '{{ secret_token }}';
-        console.log(secretToken);
-    </script>
-
     <div class="col-md-4 col-md-offset-4">
         <h2 class="hidden" id="won">{{ won }}&nbsp;<a href="/">Again</a>?</h2>
         <h2 class="hidden" id="lost">{{ lost }}&nbsp;<a href="/">Again</a>?</h2>
         <h2 id="playing">{{ playing }}&nbsp;or try a <a href="/">Different Word</a>?</h2>
         <hr>
         {% for letter in letters_to_choose_from %}
-            <div class="btn-group" role="group" aria-label="{{ letter }}" style="font-family:monospace; padding-bottom:5px">
+            <div class="btn-group" role="group" aria-label="{{ letter }}">
                 <button id="_{{ letter }}"
                         type="button"
                         class="btn btn-lg letter"
@@ -45,7 +31,7 @@
             </div>
         {% endfor %}
         <hr>
-        <h1 class="text-center" id="hangman-string" style="font-family:monospace; letter-spacing:5px">
+        <h1 class="text-center" id="hangman-string">
             {{ hangman }}
         </h1>
         <hr>

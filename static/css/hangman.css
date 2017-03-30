@@ -1,0 +1,20 @@
+html {
+    font-family:monospace;
+}
+
+.incorrect {
+    color: red;
+    text-decoration: line-through;
+}
+
+.correct {
+    color: green;
+}
+
+.btn-group {
+    padding-bottom:5px;
+}
+
+#hangman-string {
+    letter-spacing:5px;
+}
