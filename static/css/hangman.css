@@ -1,5 +1,5 @@
 body {
-    font-family:monospace !important;
+    font-family: monospace !important;
 }
 
 button {
@@ -10,16 +10,18 @@ button {
 .incorrect {
     color: red;
     text-decoration: line-through;
+    pointer-events: none;
 }
 
 .correct {
     color: green;
+    pointer-events: none;
 }
 
 .btn-group {
-    padding-bottom:5px;
+    padding-bottom: 5px;
 }
 
 #hangman-string {
-    letter-spacing:5px;
+    letter-spacing: 5px;
 }

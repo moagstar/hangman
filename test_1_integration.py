@@ -15,6 +15,7 @@ from config import VALID_CHARS, WON_TEXT, LOST_TEXT, PLAYING_TEXT
 
 
 # setup capybara / selenium
+app.app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 capybara.app = app.app
 os.environ["PATH"] = os.path.dirname(__file__) + os.pathsep + os.environ["PATH"]
 
@@ -65,10 +66,9 @@ class HangmanMachine(RuleBasedStateMachine):
 
     def __init__(self):
         super(HangmanMachine, self).__init__()
-        self.correct_characters, self.incorrect_characters = '', ''
         self.word = None
+        self.correct_characters, self.incorrect_characters = '', ''
 
-    @precondition(lambda self: self.word is None)
     @rule(word=st.text(VALID_CHARS, min_size=1, max_size=4))
     def new_game(self, word):
         """
@@ -80,7 +80,8 @@ class HangmanMachine(RuleBasedStateMachine):
         max_incorrect_guesses_patcher.start()
         get_word = get_word_patcher.start()
         get_word.return_value, self.word = word, word
-        page.visit("/")
+        self.correct_characters, self.incorrect_characters = '', ''
+        page.click_button('New Word')
 
     def _guess_character_precondition(self, character):
         """
@@ -188,4 +189,7 @@ class HangmanMachine(RuleBasedStateMachine):
 
 # run the state machine tests
 with settings(timeout=15):
-    HangmanTestCase = HangmanMachine.TestCase
+    class HangmanTestCase(HangmanMachine.TestCase):
+        def setUp(self):
+            page.visit("/")
+

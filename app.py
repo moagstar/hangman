@@ -107,5 +107,17 @@ def hangman_get():
     )
 
 
+@app.route('/new_word')
+def new_word():
+    word = get_word()
+    secret_token = encode_secret_token(word, '')
+    return jsonify(
+        hangman_string=hangman.get_hangman_string(word, ''),
+        secret_token=secret_token,
+        status='new',
+        hangman_image=0,
+    )
+
+
 if __name__ == '__main__':
     app.run()

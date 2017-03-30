@@ -17,26 +17,29 @@
 
 {% block content %}
     <div class="col-md-4 col-md-offset-4">
-        <h2 class="hidden" id="won">{{ won }}&nbsp;<a href="/">Again</a>?</h2>
-        <h2 class="hidden" id="lost">{{ lost }}&nbsp;<a href="/">Again</a>?</h2>
-        <h2 id="playing">{{ playing }}&nbsp;or try a <a href="/">Different Word</a>?</h2>
+        <h3 class="title hidden" id="won">{{ won }}</h3>
+        <h3 class="title hidden" id="lost">{{ lost }}</h3>
+        <h3 class="title" id="playing">{{ playing }}</h3>
         <hr>
         {% for character in characters_to_choose_from %}
             <div class="btn-group" role="group" aria-label="{{ character }}">
                 <button id="_{{ character }}"
-                        type="button"
+                        type="bu3tton"
                         class="btn btn-lg character"
-                        onclick="onLetterChosen('{{ character }}')">
+                        onclick="onCharacterClicked('{{ character }}')">
                     {{ character }}
                 </button>
             </div>
         {% endfor %}
-        <hr>
         <h1 class="text-center" id="hangman-string">
             {{ hangman }}
         </h1>
-        <hr>
         <img id="hangman-image" src="/static/img/0.png" class="img-responsive center-block"/>
+        <hr>
+        <button type="button"
+                class="btn btn-primary btn-lg btn-block"
+                onclick="onNewWordClicked()">
+            New Word
+        </button>
     </div>
-
 {% endblock %}

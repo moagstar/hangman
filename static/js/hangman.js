@@ -15,7 +15,7 @@ var forceRedraw = function(element){
  * @param character {string} The character that was guessed.
  * @param isCorrect {boolean} true if the character appears in the secret word, otherwise false.
  */
-function updateLetter(character, isCorrect) {
+function updateCharacter(character, isCorrect) {
     var cls = (isCorrect ? 'in' : '') + 'correct';
     $('#_' + character).addClass(cls).prop("disabled",true).blur();
     var characterElement = window.document.getElementById('_' + character);
@@ -26,8 +26,15 @@ function updateLetter(character, isCorrect) {
  * Disable all characters so that no further input can occur, this happens when
  * the game is either won or lost.
  */
-function disableAllLetters() {
-    $('.character').prop("disabled",true);
+function disableAllCharacters() {
+    $('.character').prop("disabled", true);
+}
+
+/**
+ * Enable all characters buttons.
+ */
+function enableAllCharacters() {
+    $('.character').prop("disabled", false).removeClass("correct incorrect");
 }
 
 /**
@@ -36,7 +43,7 @@ function disableAllLetters() {
  * @param id
  */
 function showTitle(id) {
-    $('#playing').addClass('hidden');
+    $('.title').addClass('hidden');
     $('#' + id).removeClass('hidden');
 }
 
@@ -47,8 +54,10 @@ function showTitle(id) {
  */
 function onHangmanString(character, data) {
 
-    var isCorrect = data.hangman_string.indexOf(character) < 0;
-    updateLetter(character, isCorrect);
+    if (character != '') {
+        var isCorrect = data.hangman_string.indexOf(character) < 0;
+        updateCharacter(character, isCorrect);
+    }
 
     $("#hangman-string").html(data.hangman_string);
     $("#hangman-image").attr("src", "/static/img/" + data.hangman_image + ".png");
@@ -56,12 +65,16 @@ function onHangmanString(character, data) {
     secretToken = data.secret_token;
 
     if (data.status == 'lost') {
-        disableAllLetters();
+        disableAllCharacters();
         showTitle('lost');
     }
     else if (data.status == 'won') {
-        disableAllLetters();
+        disableAllCharacters();
         showTitle('won');
+    }
+    else if (data.status == 'new') {
+        enableAllCharacters();
+        showTitle('playing');
     }
 }
 
@@ -69,8 +82,16 @@ function onHangmanString(character, data) {
  * Callback for handling a user click on a character.
  * @param character {string} The character that was clicked.
  */
-function onLetterChosen(character) {
+function onCharacterClicked(character) {
     var params = {'secret_token': secretToken, 'character': character};
     var callback = onHangmanString.bind(null, character);
     $.getJSON('hangman', params, callback);
+}
+
+/**
+ * Callback for handling a user click on the New Word button.
+ */
+function onNewWordClicked() {
+    var callback = onHangmanString.bind(null, '');
+    $.getJSON('new_word', {}, callback);
 }
