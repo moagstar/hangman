@@ -18,16 +18,24 @@ Bootstrap(app)
 
 def get_word():
     """
-    :return:
+    Retrieve the word which should be used for the game.:
     """
     return random.choice(WORDS_POOL)
 
 
 def encode_secret_token(word, letters):
     """
-    :param word:
-    :param letters:
-    :return:
+    Encode the word for this game and the already selected letters into a
+    secret token which can be safely passed to the front end without the
+    user seeing what the word to be guessed is.
+
+    The resulting encoded token is encrypted and url quoted for safely
+    passing to the front end.
+
+    :param word: The word to be guessed.
+    :param letters: The letters already chosen.
+
+    :return: The word and letters encoded, encrypted and url quoted.
     """
     token = ';'.join([word, letters])
     encrypted = token#hangman.encrypt(token)
@@ -36,9 +44,14 @@ def encode_secret_token(word, letters):
 
 def decode_secret_token(secret_token):
     """
+    Decode a secret token that was previously encoded, encrypted and quoted
+    to get back the word for the game and the letters that have already been
+    chosen.
 
-    :param secret_token:
-    :return:
+    :param secret_token: The secret token containing the encoded data.
+
+    :return: tuple of word, letters unquoted, decrypted and decoded from the
+             secret token.
     """
     secret_token = urllib.parse.unquote(secret_token)
     decrypted = secret_token#hangman.decrypt(secret_token)
@@ -48,6 +61,7 @@ def decode_secret_token(secret_token):
 @app.route('/')
 def index():
     """
+    Retrieve the rendered index page.
     """
     word = get_word()
     return render_template(
@@ -64,8 +78,10 @@ def index():
 @app.route('/hangman')
 def hangman_get():
     """
+    Handle the GET for retrieving the hangman string for a particular word and
+    chosen letters.
 
-    :return:
+    The result is the hangman string and the updated secret token.
     """
     secret_token = request.args['secret_token']
     word, letters = decode_secret_token(secret_token)

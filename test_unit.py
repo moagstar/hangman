@@ -82,6 +82,12 @@ def test_hangman(word, letters):
 @given(st.text(config.VALID_CHARS, min_size=1),
        st.text(config.VALID_CHARS, max_size=6))
 def test_encode_decode_secret_token(word, letters):
+    """
+    Verify that the encoding / decoding of the secret token round trips correctly.
+
+    :param word: The word to be guessed.
+    :param letters: The letters that have been chosen.
+    """
     secret_token = app.encode_secret_token(word, letters)
     decoded_word, decoded_letters = app.decode_secret_token(secret_token)
     assert decoded_word == word
@@ -89,6 +95,10 @@ def test_encode_decode_secret_token(word, letters):
 
 
 def test_has_won():
+    """
+    Verify that has_won correctly calculates whether a game is lost or not
+    based on the word and the letters chosen.
+    """
     # TODO : upper / lower test
     assert not hangman.has_won('abc', 'ab')
     assert not hangman.has_won('abc', 'ab123')
@@ -97,6 +107,10 @@ def test_has_won():
 
 
 def test_has_lost():
+    """
+    Verify that has_lost correctly calculates whether a game is lost or not
+    based on the word and the letters chosen.
+    """
     # TODO : upper / lower test
     assert not hangman.has_lost('abc', 'abc')
     assert not hangman.has_lost('abc', 'abc12')
