@@ -1,5 +1,3 @@
-# std
-import string
 # 3rd party
 from hypothesis import strategies as st, given, example
 import pytest
