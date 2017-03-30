@@ -26,7 +26,7 @@ button {
     letter-spacing: 5px;
 }
 
-@media (max-height: 600px) {
+@media (max-height: 721px) {
     .btn-sm {
         padding: 2px 4px;
         font-size: 50%;
@@ -36,7 +36,7 @@ button {
     }
 }
 
-@media (max-height: 601px) {
+@media (max-height: 722px) {
     .btn-sm {
         padding: 4px 9px;
         font-size: 90%;
