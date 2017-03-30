@@ -46,10 +46,14 @@ function showTitle(id) {
  * @param data {Object} The response from the server.
  */
 function onHangmanString(character, data) {
+
     var isCorrect = data.hangman_string.indexOf(character) < 0;
     updateLetter(character, isCorrect);
+
     $("#hangman-string").html(data.hangman_string);
+
     secretToken = data.secret_token;
+
     if (data.status == 'lost') {
         disableAllLetters();
         showTitle('lost');

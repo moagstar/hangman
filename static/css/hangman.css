@@ -3,8 +3,8 @@ html {
 }
 
 button {
-    background-color: rgb(221, 221, 221) !important;
-    color: rgb(0, 0, 0) !important;
+    background-color: rgb(221, 221, 221);
+    color: rgb(0, 0, 0);
 }
 
 .incorrect {

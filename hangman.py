@@ -81,6 +81,16 @@ def get_hangman_string(word, characters):
 
 
 def has_won(word, characters):
+    """
+    Determine if a game has been won or not based on the word to guess ad the
+    characters that have been chosen.
+
+    :param word: The word being guessed.
+    :param characters: The characters that have been guessed.
+
+    :return: True if the game has been won, or False if the game is still in
+             progress or potentially lost.
+    """
     if word:
         upper_word = word.upper()
         upper_characters = characters.upper()
@@ -91,6 +101,16 @@ def has_won(word, characters):
 
 
 def has_lost(word, characters):
+    """
+    Determine if a game has been lost or not based on the word to guess ad the
+    characters that have been chosen.
+
+    :param word: The word being guessed.
+    :param characters: The characters that have been guessed.
+
+    :return: True if the game has been lost, or False if the game is still in
+             progress or potentially won.
+    """
     if word:
         upper_word = word.upper()
         upper_characters = characters.upper()
