@@ -152,7 +152,7 @@ class HangmanMachine(RuleBasedStateMachine):
         """
         if self.word:
             expected = len(self.incorrect_characters)
-            page.find('#hangman-image[src*="%d.jpg"' % expected)
+            page.find('#hangman-image[src*="%d.png"' % expected)
 
     def _verify_title_text(self):
         """
