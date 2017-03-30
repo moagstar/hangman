@@ -100,6 +100,19 @@ def has_won(word, characters):
         return False
 
 
+def get_incorrect_letters(word, characters):
+    """
+    Get the letters which are incorrect from a word and all the letters which
+    have been guessed (both correct and incorrect).
+
+    :param word: str - The word being guessed.
+    :param characters: str - The characters which have been guessed.
+
+    :return: set containing the letters which are incorrect.
+    """
+    return set(characters.upper()) - set(word.upper())
+
+
 def has_lost(word, characters):
     """
     Determine if a game has been lost or not based on the word to guess ad the
@@ -112,9 +125,7 @@ def has_lost(word, characters):
              progress or potentially won.
     """
     if word:
-        upper_word = word.upper()
-        upper_characters = characters.upper()
-        incorrect_characters = set(upper_characters) - set(upper_word)
-        return len(incorrect_characters) >= config.MAX_INCORRECT_GUESSES
+        incorrect_letters = get_incorrect_letters(word, characters)
+        return len(incorrect_letters) >= config.MAX_INCORRECT_GUESSES
     else:
         return False

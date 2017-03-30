@@ -96,11 +96,14 @@ def hangman_get():
         secret_token = encode_secret_token(word, characters)
         status = 'playing'
 
+    hangman_string = hangman.get_hangman_string(word, characters)
+    hangman_image = len(hangman.get_incorrect_letters(word, characters))
+
     return jsonify(
-        hangman_string=hangman.get_hangman_string(word, characters),
+        hangman_string=hangman_string,
         secret_token=secret_token,
         status=status,
-        hangman_image=len(set(characters) - set(word)),
+        hangman_image=hangman_image,
     )
 
 

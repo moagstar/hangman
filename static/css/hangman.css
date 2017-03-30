@@ -1,5 +1,5 @@
-html {
-    font-family:monospace;
+body {
+    font-family:monospace !important;
 }
 
 button {
