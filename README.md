@@ -39,6 +39,12 @@ This implementation follows two design principles:
 $ pip install -r requirements.txt -r test-requirements.txt
 ```
 
+## Running development server
+
+```bash
+$ python app.py
+```
+
 ## Testing
 
 The backend is tested using py.test and hypothesis for the most part (with a couple of example
