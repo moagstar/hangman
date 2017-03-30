@@ -85,8 +85,8 @@ def has_won(word, characters):
     Determine if a game has been won or not based on the word to guess ad the
     characters that have been chosen.
 
-    :param word: The word being guessed.
-    :param characters: The characters that have been guessed.
+    :param word: str - The word being guessed.
+    :param characters: str - The characters that have been guessed.
 
     :return: True if the game has been won, or False if the game is still in
              progress or potentially lost.
@@ -105,8 +105,8 @@ def has_lost(word, characters):
     Determine if a game has been lost or not based on the word to guess ad the
     characters that have been chosen.
 
-    :param word: The word being guessed.
-    :param characters: The characters that have been guessed.
+    :param word: str - The word being guessed.
+    :param characters: str - The characters that have been guessed.
 
     :return: True if the game has been lost, or False if the game is still in
              progress or potentially won.
