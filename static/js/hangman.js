@@ -51,6 +51,7 @@ function onHangmanString(character, data) {
     updateLetter(character, isCorrect);
 
     $("#hangman-string").html(data.hangman_string);
+    $("#hangman-image").attr("src", "/static/img/" + data.hangman_image + ".jpg");
 
     secretToken = data.secret_token;
 

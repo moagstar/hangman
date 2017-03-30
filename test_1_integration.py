@@ -150,7 +150,9 @@ class HangmanMachine(RuleBasedStateMachine):
         Verify that the expected image is shown based on the incorrect characters
         in the model.
         """
-        pass # TODO
+        if self.word:
+            expected = len(self.incorrect_characters)
+            page.find('#hangman-image[src*="%d.jpg"' % expected)
 
     def _verify_title_text(self):
         """

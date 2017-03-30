@@ -100,6 +100,7 @@ def hangman_get():
         hangman_string=hangman.get_hangman_string(word, characters),
         secret_token=secret_token,
         status=status,
+        hangman_image=len(set(characters) - set(word)),
     )
 
 
