@@ -69,7 +69,7 @@ class HangmanMachine(RuleBasedStateMachine):
         self.word = None
 
     @precondition(lambda self: self.word is None)
-    @rule(word=st.text(VALID_CHARS, min_size=2, max_size=4))
+    @rule(word=st.text(VALID_CHARS, min_size=1, max_size=4))
     def new_game(self, word):
         """
         Operation to start a new game, underlying backend is patched to use

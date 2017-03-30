@@ -3,3 +3,4 @@ pytest
 mock
 capybara-py
 selenium-webdriver
+pytest-cov

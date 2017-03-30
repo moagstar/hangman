@@ -38,7 +38,7 @@ def encode_secret_token(word, characters):
     :return: The word and characters encoded, encrypted and url quoted.
     """
     token = ';'.join([word, characters])
-    encrypted = token#hangman.encrypt(token)
+    encrypted = hangman.encrypt(token)
     return urllib.parse.quote(encrypted, safe='')
 
 
@@ -54,7 +54,7 @@ def decode_secret_token(secret_token):
              secret token.
     """
     secret_token = urllib.parse.unquote(secret_token)
-    decrypted = secret_token#hangman.decrypt(secret_token)
+    decrypted = hangman.decrypt(secret_token)
     return decrypted.split(';')
 
 
