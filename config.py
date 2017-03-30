@@ -1,6 +1,6 @@
 import string
 
-WORDS_POOL = 'JHT',#'3dhubs', 'marvin', 'print', 'filament', 'order', 'layer'
+WORDS_POOL = '3dhubs', 'marvin', 'print', 'filament', 'order', 'layer'
 VALID_CHARS = string.ascii_uppercase + string.digits
 MAX_INCORRECT_GUESSES = lambda: 5
 WON_TEXT = 'Congratulations, you guessed correctly!'
